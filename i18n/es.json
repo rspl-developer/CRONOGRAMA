@@ -1,0 +1,15 @@
+{
+    "musicPlayer":{
+        "songTitle" : "La letra de la canción va aquí",
+        "songArtists": "Artistas, nombre del álbum",
+        "editButton": "Editar",
+        "addSong": "AGREGAR UNA CANCIÓN"
+    },
+    "common": {
+        "actions":{
+            "toggleToEnglish" : "Inglesa",
+            "toggleToFrench" : "Francesa",
+            "toggleToSpanish" : "Española"
+        }
+    }
+}

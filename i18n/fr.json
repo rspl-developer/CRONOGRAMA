@@ -1,0 +1,15 @@
+{
+    "musicPlayer":{
+        "songTitle" : "Les paroles des chansons vont ici",
+        "songArtists": "Artistes, Nom de l'album",
+        "editButton": "Éditer",
+        "addSong": "AJOUTER UNE CHANSON"
+    },
+    "common": {
+        "actions":{
+            "toggleToEnglish" : "Anglaise",
+            "toggleToFrench" : "Française",
+            "toggleToSpanish" : "Espagnol"
+        }
+    }
+}

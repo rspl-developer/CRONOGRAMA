@@ -1,0 +1,15 @@
+{
+    "musicPlayer":{
+        "songTitle" : "Song lyrics goes here",
+        "songArtists": "Artists, Album name",
+        "editButton": "Edit",
+        "addSong": "ADD A SONG"
+    },
+    "common": {
+        "actions":{
+            "toggleToEnglish" : "English",
+            "toggleToFrench" : "French",
+            "toggleToSpanish" : "Spanish"
+        }
+    }
+}
