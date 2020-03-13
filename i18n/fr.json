@@ -11,5 +11,6 @@
             "toggleToFrench" : "Française",
             "toggleToSpanish" : "Espagnol"
         }
-    }
+    },
+    "hello": "Salut le Monde!"
 }

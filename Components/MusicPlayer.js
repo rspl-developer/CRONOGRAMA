@@ -9,7 +9,8 @@ import {
     Text,
     Slider,
     TouchableOpacity,
-    AsyncStorage
+    AsyncStorage,
+    I18nManager
   } from 'react-native';
 import { TimeDuration } from './TimeDuration';
 import { Player } from './Player';
@@ -19,14 +20,53 @@ import { VolumeSlider } from './VolumeSlider';
 import Sound from 'react-native-sound';
 import CustomMenu from './CustomMenu';
 import { MenuProvider, Menu, MenuTrigger, MenuOptions, MenuOption } from 'react-native-popup-menu';
-import {translate} from 'react-i18next';
-import i18n from 'i18next';
+// import {translate} from 'react-i18next';
+// import i18n from 'i18next';
+import * as RNLocalize from "react-native-localize";
+import i18n from "i18n-js";
+import memoize from "lodash.memoize"; 
 
 const songs = [
     'sound_track.mp3',
     'sound_track_1.mp3',
     'sound_track_2.mp3'
   ];
+
+  const translationGetters = {
+    // lazy requires (metro bundler does not support symlinks)
+    en: () => require("../i18n/en.json"),
+    es: () => require("../i18n/es.json"),
+    fr: () => require("../i18n/fr.json")
+  };
+  
+  const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (key, config) => (config ? key + JSON.stringify(config) : key)
+  );
+  
+  const setI18nConfig = (val) => {
+    // fallback if no available language fits
+   
+    const fallback = { languageTag: "en", isRTL: false };
+  
+    let { languageTag, isRTL } =
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      fallback;
+  
+    // clear translation cache
+    translate.cache.clear();
+    // update layout direction
+    I18nManager.forceRTL(isRTL);
+
+    if(val != ""){
+        languageTag = val;
+        // alert("setI18nConfig = "+languageTag);
+    }
+
+    // set i18n-js config
+    i18n.translations = { [languageTag]: translationGetters[languageTag]() };
+    i18n.locale = languageTag;
+  };
 
  class MusicPlayer extends React.Component{
 
@@ -47,6 +87,7 @@ const songs = [
            playSong: false,
            selectedIndex: 0
          }
+         setI18nConfig(""); // set initial config
     }
 
     componentDidMount(){
@@ -162,8 +203,26 @@ const songs = [
     openMenu(){
          <CustomMenu />
     }
+      componentDidMount() {
+        RNLocalize.addEventListener("change", this.handleLocalizationChange);
+      }
+    
+      componentWillUnmount() {
+        RNLocalize.removeEventListener("change", this.handleLocalizationChange);
+      }
+    
+      handleLocalizationChange = () => {
+        setI18nConfig();
+        this.forceUpdate();
+      };  
+      
+      changeLanguage(val){
+        setI18nConfig(val);
+        this.forceUpdate();
+      }
 
     render(){
+        
         const playSong = this.state.playSong;
         // const { t,i18n,navigation} = this.props;
         // const {navigate} = navigation;
@@ -178,8 +237,8 @@ const songs = [
                         style={styles.ic_music}/>
                     <View>
                         {/* <Text style={styles.lyrics_txt}>Song lyrics goes here</Text> */}
-                        <Text style={styles.lyrics_txt}>{t(musicPlayer.songTitle)}</Text>
-                        <Text style={styles.album_name}>Artists, Album name</Text>
+                        <Text style={styles.lyrics_txt}>{translate("musicPlayer.songTitle")}</Text>
+                        <Text style={styles.album_name}>{translate("musicPlayer.songArtists")}</Text>
                     </View> 
                     <Image 
                         source={require('../images/refresh_icon.png')}
@@ -210,16 +269,11 @@ const songs = [
                 </TouchableOpacity>
                    
                 </View>
-                <EditComponent />
-                {/* <View>
-                    <TouchableOpacity onPress={this.openMenu.bind(this)}>
-                        <Image 
-                                source={require('../images/menu-vertical.png')}
-                                style={styles.ic_menu}/>
-                    </TouchableOpacity>
-                </View> */}
+                <View style={styles.duration_edit}>
+                    <Text style={styles.duration_txt}>{translate("musicPlayer.editButton")}</Text>
+                </View>
                 <MenuProvider style={{flexDirection:"column",padding:30}}>
-                   <Menu onSelect={value => alert("You Clicked : "+{value})}>
+                   <Menu onSelect={value => this.changeLanguage(value)}>
 
                         <MenuTrigger>
                         <Image 
@@ -228,14 +282,14 @@ const songs = [
                         </MenuTrigger>
 
                         <MenuOptions>
-                            <MenuOption value={"English"}>
-                                <Text style={styles.MenuText}>English</Text>
+                            <MenuOption value={"en"}>
+                                <Text style={styles.MenuText}>{translate("common.actions.toggleToEnglish")}</Text>
                             </MenuOption>
-                            <MenuOption value={"French"}>
-                                <Text style={styles.MenuText}>French</Text>
+                            <MenuOption value={"fr"}>
+                                <Text style={styles.MenuText}>{translate("common.actions.toggleToFrench")}</Text>
                             </MenuOption>
-                            <MenuOption value={"Spanish"}>
-                                <Text style={styles.MenuText}>Spanish</Text>
+                            <MenuOption value={"es"}>
+                                <Text style={styles.MenuText}>{translate("common.actions.toggleToSpanish")}</Text>
                             </MenuOption>
                         </MenuOptions>
                    </Menu>
@@ -243,7 +297,7 @@ const songs = [
             </View>
             <View style={styles.duration1}>
                 <Text style={styles.add_sign}>+</Text>
-                <Text style={styles.add_song}>ADD A SONG </Text>
+                <Text style={styles.add_song}>{translate("musicPlayer.addSong")} </Text>
             </View>
             <View style={styles.Slider_Component}>
                 <SliderComponent />
@@ -380,7 +434,20 @@ const songs = [
     MenuText:{
         fontSize: 18,
         padding: 5
-    }
+    },
+    duration_txt:{
+        fontSize: 20,
+        color: "#fff"
+     },
+     duration_edit:{
+         borderRadius: 10,
+         borderColor: "#fff",
+         borderWidth: 1,
+         padding: 20,
+         textAlign: "center",
+         alignItems: "center",
+         margin: 10
+      }
 });
 
  export { MusicPlayer }

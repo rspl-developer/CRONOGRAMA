@@ -1,4 +1,5 @@
 {
+    "hello": "Hello World!",
     "musicPlayer":{
         "songTitle" : "Song lyrics goes here",
         "songArtists": "Artists, Album name",

@@ -15,7 +15,7 @@ import {
     render(){
         return(
             <View style={styles.duration}>
-                <Text style={styles.duration_txt}>Edit</Text>
+                <Text style={styles.duration_txt}>{translate("musicPlayer.songArtists")}</Text>
             </View>
         )
     }

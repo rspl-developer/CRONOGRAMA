@@ -6,15 +6,15 @@ import {
   ScrollView,
   View,
   Text,
-  StatusBar,
+  StatusBar
 } from 'react-native';
 
 import {BackgroundCarousel} from './BackgroundCarousel';
 import { MusicPlayer } from './Components/MusicPlayer';
 import { SliderComponent } from './Components/SliderComponent';
 import { VolumeSlider } from './Components/VolumeSlider';
-import {translate} from 'react-i18next';
-import i18n from 'i18next';
+// import {translate} from 'react-i18next';
+// import i18n from 'i18next';
 import { createStackNavigator } from 'react-navigation-stack';
 
 const images = [
@@ -25,49 +25,49 @@ const images = [
   "https://images.unsplash.com/photo-1505678261036-a3fcc5e884ee?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"
 ];
 
-const Stack = createStackNavigator({
-  MusicPlayer: {screen : MusicPlayer}
-});
+// const Stack = createStackNavigator({
+//   MusicPlayer: {screen : MusicPlayer}
+// });
 
-const WrappedStack = ({t})=>{
-  return <Stack screenProps= {{t}} />
-};
+// const WrappedStack = ({t})=>{
+//   return <Stack screenProps= {{t}} />
+// };
 
 // const ReloadAppOnLanguageChange = translate('common',{
 //   bindI18n: 'languageChanged',
 //   bindStore: false
 // })(WrappedStack);
 
-export default class App extends React.Component{
-  render(){
-    return(
-      <View style={styles.body}>
-      <Stack />
-        {/* <ReloadAppOnLanguageChange /> */}
-      </View>
-    )
-  }
-}
-
-// const App: () => React$Node = () => {
-  
-//   return (
-//     // <>
-//      <View style={styles.body}>
-//         {/* <BackgroundCarousel images={images}/> */}
-//         <MusicPlayer></MusicPlayer>
-//         {/* <View style={styles.duration}>
-//           <Text style={styles.add_sign}>+</Text>
-//           <Text style={styles.add_song}>ADD A SONG </Text>
-//         </View>
-//         <View style={styles.Slider_Component}>
-//           <SliderComponent />
-//           <VolumeSlider setVolume={50}/>
-//         </View> */}
+// export default class App extends React.Component{
+//   render(){
+//     return(
+//       <View style={styles.body}>
+//       <Stack />
+//         {/* <ReloadAppOnLanguageChange /> */}
 //       </View>
-//     // </>
-//   );
-// };
+//     )
+//   }
+// }
+
+const App: () => React$Node = () => {
+  
+  return (
+    // <>
+     <View style={styles.body}>
+        {/* <BackgroundCarousel images={images}/> */}
+        <MusicPlayer></MusicPlayer>
+        {/* <View style={styles.duration}>
+          <Text style={styles.add_sign}>+</Text>
+          <Text style={styles.add_song}>ADD A SONG </Text>
+        </View>
+        <View style={styles.Slider_Component}>
+          <SliderComponent />
+          <VolumeSlider setVolume={50}/>
+        </View> */}
+      </View>
+    // </>
+  );
+};
 
 const styles = StyleSheet.create({
  
@@ -101,3 +101,5 @@ add_song:{
   color: "#fff"
 }
 });
+
+export default App;
