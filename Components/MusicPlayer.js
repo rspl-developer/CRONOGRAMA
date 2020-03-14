@@ -19,12 +19,13 @@ import { SliderComponent } from './SliderComponent';
 import { VolumeSlider } from './VolumeSlider';
 import Sound from 'react-native-sound';
 import CustomMenu from './CustomMenu';
-import { MenuProvider, Menu, MenuTrigger, MenuOptions, MenuOption } from 'react-native-popup-menu';
+// import { MenuProvider, Menu, MenuTrigger, MenuOptions, MenuOption } from 'react-native-popup-menu';
 // import {translate} from 'react-i18next';
 // import i18n from 'i18next';
 import * as RNLocalize from "react-native-localize";
 import i18n from "i18n-js";
 import memoize from "lodash.memoize"; 
+import Menu, { MenuItem, MenuDivider, Position } from "react-native-enhanced-popup-menu";
 
 const songs = [
     'sound_track.mp3',
@@ -67,6 +68,15 @@ const songs = [
     i18n.translations = { [languageTag]: translationGetters[languageTag]() };
     i18n.locale = languageTag;
   };
+
+  let menuRef = null;
+  let textRef = React.createRef();
+
+  const setMenuRef = ref => menuRef = ref;
+  const hideMenu = () => menuRef.hide();
+  const showMenu = () => menuRef.show(textRef.current, stickTo = Position.TOP_RIGHT);
+  
+  const onPress = () => showMenu();
 
  class MusicPlayer extends React.Component{
 
@@ -217,15 +227,18 @@ const songs = [
       changeLanguage(val){
         setI18nConfig(val);
         this.forceUpdate();
+        hideMenu();
       }
 
     render(){
         
         const playSong = this.state.playSong;
+       
         // const { t,i18n,navigation} = this.props;
         // const {navigate} = navigation;
         return(
-        <View style={styles.body}>
+            <ScrollView horizontal={true}>
+             <View style={styles.body}>
             <View style={styles.MusicPLayer}>
                 <TimeDuration/>
                 {/* <Player hello={this.hello} setVolume={this.state.setVolume}/> */}
@@ -235,7 +248,7 @@ const songs = [
                         style={styles.ic_music}/>
                     <View>
                         {/* <Text style={styles.lyrics_txt}>Song lyrics goes here</Text> */}
-                        <Text style={styles.lyrics_txt}>{translate("musicPlayer.songTitle")}</Text>
+                        <Text style={styles.lyrics_txt}>{translate(["songName",this.state.selectedIndex])}</Text>
                         <Text style={styles.album_name}>{translate("musicPlayer.songArtists")}</Text>
                     </View> 
                     <Image 
@@ -270,8 +283,9 @@ const songs = [
                 <View style={styles.duration_edit}>
                     <Text style={styles.duration_txt}>{translate("musicPlayer.editButton")}</Text>
                 </View>
-                <MenuProvider style={{flexDirection:"column",padding:30}}>
-                   <Menu onSelect={value => this.changeLanguage(value)}>
+                {/* <View style={{alignItems: "center"}}> */}
+                    {/* <MenuProvider style={{flexDirection:"column"}}>
+                   <Menu onSelect={value => this.changeLanguage(value)} style={{position:'absolute',top:20}}>
 
                         <MenuTrigger>
                         <Image 
@@ -279,20 +293,48 @@ const songs = [
                                 style={styles.ic_menu}/>
                         </MenuTrigger>
 
-                        <MenuOptions>
-                            <MenuOption value={"en"}>
+                        <MenuOptions optionsContainerStyle={{paddingLeft:0,height:500,width:500}}>
+                            <MenuOption value={"en"} customStyles={{height:48,width:100}}>
                                 <Text style={styles.MenuText}>{translate("common.actions.toggleToEnglish")}</Text>
                             </MenuOption>
-                            <MenuOption value={"fr"}>
+                            <MenuOption value={"fr"} customStyles={{height:48,width:100}}>
                                 <Text style={styles.MenuText}>{translate("common.actions.toggleToFrench")}</Text>
                             </MenuOption>
-                            <MenuOption value={"es"}>
+                            <MenuOption value={"es"} customStyles={{height:48,width:100}}>
                                 <Text style={styles.MenuText}>{translate("common.actions.toggleToSpanish")}</Text>
                             </MenuOption>
                         </MenuOptions>
                    </Menu>
-                </MenuProvider>
-            </View>
+                </MenuProvider> */}
+                {/* </View> */}
+            
+               <View style={{ flex: 1, alignItems: "center"}}>
+                    <Text
+                        ref={textRef}
+                        style={{ fontSize: 20, textAlign: "center" }}
+                    >
+                    </Text>
+                
+                    <TouchableOpacity onPress={onPress}>
+                     <Image 
+                                source={require('../images/menu-vertical.png')}
+                                style={styles.ic_menu}/>
+                    </TouchableOpacity>
+                
+                    <Menu ref={setMenuRef}>
+                        <MenuItem onPress={value => this.changeLanguage("en")}>
+                            <Text style={styles.MenuText}>{translate("common.actions.toggleToEnglish")}</Text>
+                        </MenuItem>
+                        <MenuItem onPress={value => {this.changeLanguage("fr");}}>
+                            <Text style={styles.MenuText}>{translate("common.actions.toggleToFrench")}</Text>
+                        </MenuItem>
+                        <MenuItem onPress={value => this.changeLanguage("es")}>
+                            <Text style={styles.MenuText}>{translate("common.actions.toggleToSpanish")}</Text>
+                        </MenuItem>
+                    </Menu>
+                    </View> 
+                
+            </View> 
             <View style={styles.duration1}>
                 <Text style={styles.add_sign}>+</Text>
                 <Text style={styles.add_song}>{translate("musicPlayer.addSong")} </Text>
@@ -312,6 +354,8 @@ const songs = [
                 </View>   
             </View>
         </View>
+            </ScrollView>
+       
           
         )
     }

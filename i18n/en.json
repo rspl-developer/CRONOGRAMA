@@ -12,5 +12,11 @@
             "toggleToFrench" : "French",
             "toggleToSpanish" : "Spanish"
         }
+    },
+    "songName":{
+        "0":"Sound Track",
+        "1":"Sound Track 1",
+        "2":"Sound Track 2"
     }
+    
 }

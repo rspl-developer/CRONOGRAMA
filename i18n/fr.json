@@ -12,5 +12,9 @@
             "toggleToSpanish" : "Espagnol"
         }
     },
-    "hello": "Salut le Monde!"
+    "songName":{
+        "0":"Bande sonore",
+        "1":"Bande sonore 1",
+        "2":"Bande sonore 2"
+    }
 }

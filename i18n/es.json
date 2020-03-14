@@ -11,5 +11,10 @@
             "toggleToFrench" : "Francesa",
             "toggleToSpanish" : "Española"
         }
+    },
+    "songName":{
+        "0":"Pista de sonido",
+        "1":"Pista de sonido 1",
+        "2":"Pista de sonido 2"
     }
 }
