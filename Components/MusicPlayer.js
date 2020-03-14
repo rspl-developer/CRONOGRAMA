@@ -91,6 +91,7 @@ const songs = [
     }
 
     componentDidMount(){
+        RNLocalize.addEventListener("change", this.handleLocalizationChange);
         this.hello = new Sound(songs[this.state.selectedIndex], Sound.MAIN_BUNDLE, (error) => {
           if (error) {
             alert('failed to load the sound', error);
@@ -203,9 +204,6 @@ const songs = [
     openMenu(){
          <CustomMenu />
     }
-      componentDidMount() {
-        RNLocalize.addEventListener("change", this.handleLocalizationChange);
-      }
     
       componentWillUnmount() {
         RNLocalize.removeEventListener("change", this.handleLocalizationChange);
